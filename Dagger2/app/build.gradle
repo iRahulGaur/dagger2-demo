@@ -18,6 +18,10 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    buildFeatures {
+        dataBinding = true
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -57,14 +61,20 @@ dependencies {
     implementation "com.github.bumptech.glide:glide:$glide_version"
     kapt "com.github.bumptech.glide:compiler:$glide_version"
 
-    // ViewModel and LiveData
-    def lifecycle_version = '2.3.1'
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
-
     // Retrofit
     def retrofitVersion = "2.9.0"
     implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
     implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
+    // Rx-Retrofit Call Adapter
+    implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofitVersion" // Retrofit call adapter
 
+    // Rx
+    def rxkt_version = "2.4.0"
+    implementation "io.reactivex.rxjava2:rxkotlin:${rxkt_version}"
+    def rxAndroid_version = "2.1.1"
+    implementation "io.reactivex.rxjava2:rxandroid:${rxAndroid_version}"
+
+    // LifeCycleExtensions
+    def lifecycle_version = "2.3.1"
+    implementation "androidx.lifecycle:lifecycle-reactivestreams-ktx:$lifecycle_version"
 }

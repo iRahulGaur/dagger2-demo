@@ -1,12 +1,15 @@
 package com.aws.dagger2.network.auth
 
-import okhttp3.ResponseBody
-import retrofit2.Call
+import com.aws.dagger2.models.User
+import io.reactivex.Flowable
 import retrofit2.http.GET
+import retrofit2.http.Path
 
 interface AuthApi {
 
-    @GET
-    fun getStaff(): Call<ResponseBody>
+    @GET("users/{id}")
+    fun getUser(
+        @Path("id") id: Int
+    ): Flowable<User>
 
 }
