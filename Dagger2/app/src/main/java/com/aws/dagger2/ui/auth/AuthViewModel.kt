@@ -3,13 +3,14 @@ package com.aws.dagger2.ui.auth
 import android.text.TextUtils
 import android.util.Log
 import androidx.lifecycle.*
+import com.aws.dagger2.SessionManager
 import com.aws.dagger2.models.User
 import com.aws.dagger2.network.auth.AuthApi
 import com.aws.dagger2.util.UtilsManager
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
-class AuthViewModel @Inject constructor(private val authApi: AuthApi): ViewModel() {
+class AuthViewModel @Inject constructor(private val authApi: AuthApi, private val sessionManager: SessionManager): ViewModel() {
 
     companion object {
         private const val TAG = "AuthViewModel"
@@ -20,16 +21,18 @@ class AuthViewModel @Inject constructor(private val authApi: AuthApi): ViewModel
         return userIDString
     }
 
-    private var authUser: MediatorLiveData<AuthResource<out User?>> = MediatorLiveData()
-    fun observeUser(): LiveData<AuthResource<out User?>> {
-        return authUser
+    fun observeAuthState(): LiveData<AuthResource<out User?>> {
+        return sessionManager.getAuthUser()
     }
 
     private fun authenticateWithId(userID: Int) {
-        authUser.value = AuthResource.loading(null)
+        UtilsManager.log(TAG, "authenticateWithId: attempting to login")
+        sessionManager.authenticateWithId(queryUserId(userID))
+    }
 
-        val source = LiveDataReactiveStreams.fromPublisher(
-            authApi.getUser(userID)
+    private fun queryUserId(id: Int): LiveData<AuthResource<out User?>> {
+        return LiveDataReactiveStreams.fromPublisher(
+            authApi.getUser(id)
                 .onErrorReturn {
                     return@onErrorReturn User("",-1,"","","","")
                 }
@@ -41,11 +44,6 @@ class AuthViewModel @Inject constructor(private val authApi: AuthApi): ViewModel
                 }
                 .subscribeOn(Schedulers.io())
         )
-
-        authUser.addSource(source) {
-            authUser.value = it
-            authUser.removeSource(source)
-        }
     }
 
     fun init() {
@@ -58,10 +56,10 @@ class AuthViewModel @Inject constructor(private val authApi: AuthApi): ViewModel
                 UtilsManager.log(TAG, "attemptLogin: userID is valid $")
                 authenticateWithId(userIDString.value!!.toInt())
             } else {
-                authUser.value = AuthResource.error("Please enter your id", null)
+                sessionManager.setError("Please enter your id")
             }
         } else {
-            authUser.value = AuthResource.error("Please enter your id", null)
+            sessionManager.setError("Please enter your id")
         }
     }
 }

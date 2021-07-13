@@ -1,5 +1,6 @@
 package com.aws.dagger2.ui.auth
 
+import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.widget.Toast
@@ -7,6 +8,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.aws.dagger2.R
 import com.aws.dagger2.databinding.ActivityAuthBinding
+import com.aws.dagger2.ui.main.MainActivity
 import com.aws.dagger2.util.ProgressManager
 import com.aws.dagger2.util.UtilsManager
 import com.aws.dagger2.viewModels.ViewModelProvidersFactory
@@ -50,7 +52,7 @@ class AuthActivity : DaggerAppCompatActivity() {
 
     private fun subscribeObservers() {
 
-        viewModel.observeUser().observe(this) { authResource ->
+        viewModel.observeAuthState().observe(this) { authResource ->
             if (authResource != null) {
                 when (authResource.status) {
                     AuthResource.AuthStatus.LOADING -> {
@@ -64,6 +66,7 @@ class AuthActivity : DaggerAppCompatActivity() {
                             "Welcome ${authResource.data?.name}",
                             Toast.LENGTH_SHORT
                         ).show()
+                        onLoginSuccess()
                     }
                     AuthResource.AuthStatus.ERROR -> {
                         progressManager.dismissDialog()
@@ -80,6 +83,12 @@ class AuthActivity : DaggerAppCompatActivity() {
                 }
             }
         }
+    }
+
+    private fun onLoginSuccess() {
+        val loginIntent = Intent(this, MainActivity::class.java)
+        startActivity(loginIntent)
+        finish()
     }
 
     private fun setLogo() {
