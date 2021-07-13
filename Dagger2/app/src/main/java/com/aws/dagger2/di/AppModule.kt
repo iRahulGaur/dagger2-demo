@@ -9,10 +9,12 @@ import com.bumptech.glide.RequestManager
 import com.bumptech.glide.request.RequestOptions
 import dagger.Module
 import dagger.Provides
+import javax.inject.Singleton
 
 @Module
 object AppModule {
 
+    @Singleton
     @Provides
     fun provideRequestOptions(): RequestOptions {
         return RequestOptions()
@@ -20,12 +22,14 @@ object AppModule {
             .error(R.drawable.placeholder)
     }
 
+    @Singleton
     @Provides
     fun profileGlideInstance(application: Application, requestOptions: RequestOptions) : RequestManager {
         return Glide.with(application)
             .setDefaultRequestOptions(requestOptions)
     }
 
+    @Singleton
     @Provides
     fun provideAppLogo(application: Application): Drawable {
         return ContextCompat.getDrawable(application, R.drawable.logo)!!
