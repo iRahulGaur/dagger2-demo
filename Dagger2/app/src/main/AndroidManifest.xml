@@ -12,7 +12,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:name=".MyApplication"
-        android:theme="@style/Theme.Dagger2"
+        android:theme="@style/AppTheme"
         tools:ignore="AllowBackup">
         <activity android:name=".ui.auth.AuthActivity">
             <intent-filter>

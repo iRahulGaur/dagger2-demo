@@ -7,6 +7,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.aws.dagger2.R
 import com.aws.dagger2.databinding.ActivityAuthBinding
+import com.aws.dagger2.util.ProgressManager
 import com.aws.dagger2.util.UtilsManager
 import com.aws.dagger2.viewModels.ViewModelProvidersFactory
 import com.bumptech.glide.RequestManager
@@ -31,12 +32,16 @@ class AuthActivity : DaggerAppCompatActivity() {
     @Inject
     lateinit var requestManager: RequestManager
 
+    @Inject
+    lateinit var progressManager: ProgressManager
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_auth)
         viewModel = ViewModelProvider(this, providersFactory).get(AuthViewModel::class.java)
         binding.viewModel = viewModel
         binding.lifecycleOwner = this
+
         viewModel.init()
 
         setLogo()
@@ -44,12 +49,37 @@ class AuthActivity : DaggerAppCompatActivity() {
     }
 
     private fun subscribeObservers() {
-        viewModel.observeUser().observe(this, { user ->
-            if (user != null) {
-                UtilsManager.log(TAG, "subscribeObservers: we have user email = ${user.email}")
-                Toast.makeText(this, "User logged in = ${user.name}", Toast.LENGTH_SHORT).show()
+
+        viewModel.observeUser().observe(this) { authResource ->
+            if (authResource != null) {
+                when (authResource.status) {
+                    AuthResource.AuthStatus.LOADING -> {
+                        progressManager.showProgressDialog(this,"Getting your data")
+                        UtilsManager.log(TAG, "subscribeObservers: loading called!!!!!!!!")
+                    }
+                    AuthResource.AuthStatus.AUTHENTICATED -> {
+                        progressManager.dismissDialog()
+                        Toast.makeText(
+                            this,
+                            "Welcome ${authResource.data?.name}",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                    AuthResource.AuthStatus.ERROR -> {
+                        progressManager.dismissDialog()
+                        Toast.makeText(
+                            this,
+                            "Error login: ${authResource.message}",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                    AuthResource.AuthStatus.NOT_AUTHENTICATED -> {
+                        progressManager.dismissDialog()
+                        UtilsManager.log(TAG, "subscribeObservers: not authenticate")
+                    }
+                }
             }
-        })
+        }
     }
 
     private fun setLogo() {

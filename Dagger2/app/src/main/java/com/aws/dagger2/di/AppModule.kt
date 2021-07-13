@@ -5,6 +5,7 @@ import android.graphics.drawable.Drawable
 import androidx.core.content.ContextCompat
 import com.aws.dagger2.R
 import com.aws.dagger2.util.Constants
+import com.aws.dagger2.util.ProgressManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
 import com.bumptech.glide.request.RequestOptions
@@ -17,6 +18,12 @@ import javax.inject.Singleton
 
 @Module
 object AppModule {
+
+    @Singleton
+    @Provides
+    fun provideProgressManager(): ProgressManager {
+        return ProgressManager()
+    }
 
     @Singleton
     @Provides

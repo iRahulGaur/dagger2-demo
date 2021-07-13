@@ -1,0 +1,45 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:editTextColor">@color/textColor</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:spotShadowAlpha">0.06</item>
+        <item name="android:windowContentTransitions">true</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
+
+        <!--Bottom sheet style-->
+        <item name="bottomSheetDialogTheme">@style/AppBottomSheetTheme</item>
+
+    </style>
+
+    <style name="TextStyle">
+        <item name="android:textColor">@color/textColor</item>
+    </style>
+
+    <style name="EditTextStyle">
+        <item name="android:padding">10dp</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="AppBottomSheetTheme" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/AppModalStyle</item>
+    </style>
+
+    <style name="AppModalStyle" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@color/trans</item>
+        <item name="behavior_hideable">true</item>
+        <item name="behavior_peekHeight">500dp</item>
+    </style>
+
+    <style name="MyHintStyle" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/darkHint</item>
+        <item name="android:textSize">12sp</item>
+        <item name="colorControlActivated">@color/darkHint</item>
+        <item name="colorControlNormal">@color/darkHint</item>
+        <item name="colorControlHighlight">@color/darkHint</item>
+    </style>
+
+</resources>

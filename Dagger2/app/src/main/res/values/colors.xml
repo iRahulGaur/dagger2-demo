@@ -1,10 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="purple_200">#FFBB86FC</color>
-    <color name="purple_500">#FF6200EE</color>
-    <color name="purple_700">#FF3700B3</color>
-    <color name="teal_200">#FF03DAC5</color>
-    <color name="teal_700">#FF018786</color>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <color name="colorPrimary">@color/white</color>
+    <color name="colorPrimaryDark">@color/backgroundColor</color>
+    <color name="colorAccent">#1a9154</color>
+    <color name="colorAccentDisable">#b5dcc8</color>
+
+    <color name="white">#FFFFFF</color>
+    <color name="textColor">#4F4F4F</color>
+    <color name="trans">#00FFFFFF</color>
+    <color name="hintColor">#BFBFBF</color>
+    <color name="greenColor">#4CAF50</color>
+    <color name="colorBlack">#3C3C3D</color>
+    <color name="redColor">#EF5350</color>
+    <color name="redButtonColor">#B51515</color>
+    <color name="yellowColor">#ffc107</color>
+    <color name="readColor">#9ec0cc</color>
+    <color name="lineColor">#F2F2F2</color>
+    <color name="buttonColor">#E0E0E0</color>
+    <color name="outerLineColor">#E0E0E0</color>
+    <color name="darkHint">#828282</color>
+    <color name="backgroundColor">#fffbff</color>
+    <color name="fragmentBackgroundColor">#fffbff</color>
+    <color name="barColor">#c8c8c8</color>
+
+    <color name="qiscus_green">@color/colorAccent</color>
+
+    <color name="notification_line_color">#F2F2F2</color>
+    <color name="notification_item_bg">#FBFBFB</color>
+
+    <color name="unreadBgColor">#D1F0AE</color>
+
+    <color name="editTextUnselected">#E0E0E0</color>
+    <color name="editTextSelected">#BDBDBD</color>
+
+    <color name="colorBlackTint">#70000000</color>
+    <color name="menuAmountColor">#d48110</color>
+
+    <color name="colorAccentSelectColor80">#CC1A9154</color>
+
+    <color name="homeTopRoundColor">#f4f7ff</color>
+    <color name="homeCategoryBgBottomColor">#f3fceb</color>
+    <color name="homeEducationBgBottomColor">#fdf8e9</color>
+    <color name="homeJobBgBottomColor">#fff3f2</color>
+
+    <color name="jobCategoryBG1">#f3fceb</color>
+    <color name="jobCategoryBG2">#fff3f2</color>
+    <color name="jobCategoryBG3">#fdf8e9</color>
+
 </resources>

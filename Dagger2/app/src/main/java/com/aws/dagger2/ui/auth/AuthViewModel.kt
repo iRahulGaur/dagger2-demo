@@ -15,24 +15,35 @@ class AuthViewModel @Inject constructor(private val authApi: AuthApi): ViewModel
         private const val TAG = "AuthViewModel"
     }
 
-    private val userIDString: MutableLiveData<String> = MutableLiveData()
-    fun getUserID(): MutableLiveData<String> {
+    private val userIDString: MutableLiveData<String?> = MutableLiveData()
+    fun getUserID(): MutableLiveData<String?> {
         return userIDString
     }
 
-    private var authUser: MediatorLiveData<User> = MediatorLiveData()
-    fun observeUser(): LiveData<User> {
+    private var authUser: MediatorLiveData<AuthResource<out User?>> = MediatorLiveData()
+    fun observeUser(): LiveData<AuthResource<out User?>> {
         return authUser
     }
 
     private fun authenticateWithId(userID: Int) {
+        authUser.value = AuthResource.loading(null)
+
         val source = LiveDataReactiveStreams.fromPublisher(
             authApi.getUser(userID)
+                .onErrorReturn {
+                    return@onErrorReturn User("",-1,"","","","")
+                }
+                .map {
+                    if (it.id == -1)
+                        return@map AuthResource.error("Could not authenticate", null)
+                    else
+                        return@map AuthResource.authenticated(it)
+                }
                 .subscribeOn(Schedulers.io())
         )
 
-        authUser.addSource(source) { user ->
-            authUser.value = user
+        authUser.addSource(source) {
+            authUser.value = it
             authUser.removeSource(source)
         }
     }
@@ -42,10 +53,15 @@ class AuthViewModel @Inject constructor(private val authApi: AuthApi): ViewModel
     }
 
     fun attemptLogin() {
-        if (TextUtils.isEmpty(userIDString.value.toString())) {
-            return
+        if (userIDString.value != null) {
+            if (!TextUtils.isEmpty(userIDString.value)) {
+                UtilsManager.log(TAG, "attemptLogin: userID is valid $")
+                authenticateWithId(userIDString.value!!.toInt())
+            } else {
+                authUser.value = AuthResource.error("Please enter your id", null)
+            }
+        } else {
+            authUser.value = AuthResource.error("Please enter your id", null)
         }
-        UtilsManager.log(TAG, "attemptLogin: userID is valid")
-        authenticateWithId(userIDString.value.toString().toInt())
     }
 }
