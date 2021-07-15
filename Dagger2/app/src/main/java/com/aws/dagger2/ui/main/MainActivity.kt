@@ -6,6 +6,7 @@ import android.view.MenuItem
 import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.NavController
+import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
 import androidx.navigation.ui.NavigationUI
 import com.aws.dagger2.BaseActivity
@@ -58,18 +59,28 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.nav_profile -> {
+                val navOptions: NavOptions = NavOptions.Builder()
+                    .setPopUpTo(R.id.main, true)
+                    .build()
                 Navigation.findNavController(this, R.id.nav_host_fragment)
-                    .navigate(R.id.profileScreen)
+                    .navigate(R.id.profileScreen, null, navOptions)
             }
             R.id.nav_posts -> {
-                Navigation.findNavController(this, R.id.nav_host_fragment)
-                    .navigate(R.id.postsScreen)
+                if (isValidProfileDestination()) {
+                    Navigation.findNavController(this, R.id.nav_host_fragment)
+                        .navigate(R.id.postsScreen)
+                }
             }
         }
 
         item.isChecked = true
         binding.drawerLayout.closeDrawer(GravityCompat.START)
         return false
+    }
+
+    private fun isValidProfileDestination(): Boolean {
+        return R.id.postsScreen != Navigation.findNavController(this, R.id.nav_host_fragment)
+            .currentDestination?.id
     }
 
     override fun onSupportNavigateUp(): Boolean {
