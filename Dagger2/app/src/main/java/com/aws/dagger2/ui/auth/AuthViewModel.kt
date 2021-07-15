@@ -4,7 +4,7 @@ import android.text.TextUtils
 import android.util.Log
 import androidx.lifecycle.*
 import com.aws.dagger2.SessionManager
-import com.aws.dagger2.models.User
+import com.aws.dagger2.models.UserModel
 import com.aws.dagger2.network.auth.AuthApi
 import com.aws.dagger2.util.UtilsManager
 import io.reactivex.schedulers.Schedulers
@@ -21,7 +21,7 @@ class AuthViewModel @Inject constructor(private val authApi: AuthApi, private va
         return userIDString
     }
 
-    fun observeAuthState(): LiveData<AuthResource<out User?>> {
+    fun observeAuthState(): LiveData<AuthResource<out UserModel?>> {
         return sessionManager.getAuthUser()
     }
 
@@ -30,11 +30,11 @@ class AuthViewModel @Inject constructor(private val authApi: AuthApi, private va
         sessionManager.authenticateWithId(queryUserId(userID))
     }
 
-    private fun queryUserId(id: Int): LiveData<AuthResource<out User?>> {
+    private fun queryUserId(id: Int): LiveData<AuthResource<out UserModel?>> {
         return LiveDataReactiveStreams.fromPublisher(
             authApi.getUser(id)
                 .onErrorReturn {
-                    return@onErrorReturn User("",-1,"","","","")
+                    return@onErrorReturn UserModel("",-1,"","","","")
                 }
                 .map {
                     if (it.id == -1)

@@ -23,6 +23,7 @@ abstract class BaseActivity: DaggerAppCompatActivity() {
     }
 
     private fun subscribeObservers() {
+        UtilsManager.log(TAG, "subscribeObservers: called")
         sessionManager.getAuthUser().observe(this ) { authResource ->
             if (authResource != null) {
                 when (authResource.status) {

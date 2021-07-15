@@ -3,7 +3,7 @@ package com.aws.dagger2.models
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-data class User(
+data class UserModel(
     @SerializedName("email")
     @Expose
     val email: String, // Rey.Padberg@karina.biz

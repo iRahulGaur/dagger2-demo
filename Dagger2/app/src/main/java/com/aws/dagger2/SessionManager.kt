@@ -2,7 +2,7 @@ package com.aws.dagger2
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
-import com.aws.dagger2.models.User
+import com.aws.dagger2.models.UserModel
 import com.aws.dagger2.ui.auth.AuthResource
 import com.aws.dagger2.util.UtilsManager
 import javax.inject.Inject
@@ -15,30 +15,30 @@ class SessionManager @Inject constructor() {
         private const val TAG = "SessionManager"
     }
 
-    private val cachedUser: MediatorLiveData<AuthResource<out User?>> = MediatorLiveData()
+    private val cachedUserModel: MediatorLiveData<AuthResource<out UserModel?>> = MediatorLiveData()
 
-    fun authenticateWithId(source: LiveData<AuthResource<out User?>>) {
-        if (cachedUser.value != null) {
-            cachedUser.value = AuthResource.loading(null)
-            cachedUser.addSource(source
+    fun authenticateWithId(source: LiveData<AuthResource<out UserModel?>>) {
+        if (cachedUserModel.value != null) {
+            cachedUserModel.value = AuthResource.loading(null)
+            cachedUserModel.addSource(source
             ) {
-                cachedUser.value = it
-                cachedUser.removeSource(source)
+                cachedUserModel.value = it
+                cachedUserModel.removeSource(source)
             }
         }
     }
 
     fun setError(message: String) {
-        cachedUser.value = AuthResource.error(message+"", null)
+        cachedUserModel.value = AuthResource.error(message+"", null)
     }
 
     fun logout() {
         UtilsManager.log(TAG, "logout: logging out user")
-        cachedUser.value = AuthResource.logout()
+        cachedUserModel.value = AuthResource.logout()
     }
 
-    fun getAuthUser(): LiveData<AuthResource<out User?>> {
-        return cachedUser
+    fun getAuthUser(): LiveData<AuthResource<out UserModel?>> {
+        return cachedUserModel
     }
 
 }

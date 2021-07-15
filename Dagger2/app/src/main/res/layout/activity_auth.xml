@@ -20,11 +20,11 @@
             android:contentDescription="@string/desc"
             android:layout_marginTop="40dp"
             android:layout_width="match_parent"
-            android:layout_height="200dp"/>
+            android:layout_height="150dp"/>
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/user_id_input"
-            android:hint="User ID"
+            android:hint="@string/user_id"
             android:text="@={viewModel.userID}"
             android:textColor="#4C4C4C"
             android:lines="1"
@@ -37,7 +37,7 @@
             android:layout_height="wrap_content"/>
 
         <Button
-            android:text="Login"
+            android:text="@string/login"
             android:textColor="#202020"
             android:id="@+id/login_button"
             android:background="#C1C1C1"
